@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 //import 'react-datepicker/src/stylesheets/mixins.scss';
 import "react-datepicker/dist/react-datepicker.css";
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-import '../../../src/bootstrap/bootstrap.css';
+
 
 function SignUp(props) {
   const [startDate, setStartDate] = useState(new Date());
@@ -86,31 +86,45 @@ const onSaveClick = (event) => {
 
 
   return (
-    <div  className="col-md-5">
-      <div>
-        <label>Kullanıcı Adı</label>
-        <input className="form-control" onChange={onFormChange} type="text" id="userName" value={formState.userName} />
+    <div  className="col-md-4">
+      
+      <div className="clearfix  form-group">
+        <label className="col-md-4">Username</label>
+        <div className="col-md-8" > 
+        <input className="form-control" onChange={onFormChange} type="text" placeholder="Username" id="userName" value={formState.userName} />
+        </div>
       </div>
-      <div>
-        <label>E-Mail</label>
-        <input type="text" className="form-control" onChange={onFormChange} id="email"  value={formState.email}/>
+      <div className="clearfix  form-group">
+        <label className="col-md-4">E-Mail</label>
+        <div className="col-md-8" > 
+        <input type="text" className="form-control"  placeholder="e-mail"  onChange={onFormChange} id="email"  value={formState.email}/>
       </div>
-      <div>
-        <label>Parola</label>
-        <input type="text" className="form-control" onChange={onFormChange} id="password"  value={formState.password} />
-        <input type="text" className="form-control"  onChange={onFormChange} id="passwordAgain"  value={formState.passwordAgain}/>
+      </div>
+      <div className="clearfix  form-group">
+        <label className="col-md-4">Password</label>
+        <div className="col-md-8" > 
+        <input type="text" className="form-control"  placeholder="Password" onChange={onFormChange} id="password"  value={formState.password} />
+        <div class="input-group-addon">
+        <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+        <a href=""><i class="fa fa-eye" aria-hidden="true"></i></a>
+      </div>
+        <input type="text" className="form-control"  placeholder="Password Again" onChange={onFormChange} id="passwordAgain"  value={formState.passwordAgain}/>
         <p id="passwordError">{errorMessageState.password}</p>
+       </div>
+      
+
       </div>
-      <div>
-        <label>Doğum Tarihi</label>
-        
+      <div className="clearfix  form-group">
+        <label className="col-md-4">Birthdate</label>
+        <div className="col-md-8" > 
     <DatePicker
       showIcon
+      className="form-control"
       selected={formState.birthDate}
       onChange={(date)=>  setForm(prevState=> {return {...prevState,birthDate:date}} )
       }
     />
-      
+         </div>
       </div>
       <button onClick={onSaveClick}>Kaydet</button>
    
