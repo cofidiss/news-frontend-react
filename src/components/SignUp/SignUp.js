@@ -9,6 +9,7 @@ import Modal from "../Modal/Modal";
 
 
 function SignUp(props) {
+  const baseUrl = props.baseUrl;
   const [modalState, setModalState] = useState({isOpen:false,header:undefined,content:null,negativeOnClick:undefined,positiveOnClick:undefined});
 
   const [startDate, setStartDate] = useState(new Date());
@@ -87,6 +88,30 @@ function SignUp(props) {
   const onSaveClick = (event) => {
 
     setIsPreloaderOpen(true);
+
+    fetch(`${baseUrl}/api/Users/SignUp`, {
+      method: 'POST', // or 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify(formState)
+        })
+      .then((response) => {
+  if (!response.ok){
+    debugger;
+  return Promise.reject("Unknown Error Occured");
+  }
+  return response.json(); }).then(x=> {
+if (x.hasError){
+return Promise.reject(x.message);
+}
+setModalState({isOpen:true,content:x.message});
+
+  }).catch(x=> {
+debugger;
+    setModalState({isOpen:true,content:x});
+
+  }).finally( () =>setIsPreloaderOpen(false))
   };
 
   const onPasswordVisibleClick = (event) => {
@@ -111,9 +136,10 @@ function SignUp(props) {
   };
 
   return (
+    <div>  <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+    <Preloader isOpen={isPreloaderOpenState}/>
     <div className="col-md-4">
-<Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
-<Preloader isOpen={isPreloaderOpenState}/>
+
 
       <div className="clearfix  form-group">
         <label className="col-md-4">Username</label>
@@ -217,6 +243,7 @@ function SignUp(props) {
         </div>
       </div>
       <button className="btn btn-primary"  onClick={onSaveClick}>SignUp</button>
+    </div>
     </div>
   );
 }

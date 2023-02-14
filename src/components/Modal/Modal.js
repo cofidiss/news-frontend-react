@@ -1,30 +1,34 @@
-import { Button, Modal } from 'semantic-ui-react'
+import { Button, Modal as ModalFromSemanticUI} from 'semantic-ui-react'
 
 
 function Modal(props){
 
   var modalHeader = props.header;
-  var modalContent = props.Content;
+  var modalContent = props.content;
 
 var isOpen = props.isOpen;
 var negativeOnClick = props.negativeOnClick;
 var positiveOnClick = props.positiveOnClick;
-<Modal
-        dimmer="blurring"
-        open={isOpen}
-  
-      >
-        <Modal.Header>{modalHeader}</Modal.Header>
-        <Modal.Content>
-       {modalContent}
-        </Modal.Content>
-        <Modal.Actions>
-          <Button negative onClick={positiveOnClick}>
-            Disagree
-          </Button>
-          <Button positive onClick={negativeOnClick}>
-            Agree
-          </Button>
-        </Modal.Actions>
-      </Modal>
+return (<ModalFromSemanticUI
+  dimmer="blurring"
+  open={isOpen}
+  size={"small"}
+
+>
+  <ModalFromSemanticUI.Header>{modalHeader}</ModalFromSemanticUI.Header>
+  <ModalFromSemanticUI.Content>
+ {modalContent}
+  </ModalFromSemanticUI.Content>
+  <ModalFromSemanticUI.Actions>
+    <Button negative onClick={positiveOnClick}>
+      Disagree
+    </Button>
+    <Button positive onClick={negativeOnClick}>
+      Agree
+    </Button>
+  </ModalFromSemanticUI.Actions>
+</ModalFromSemanticUI>);
+
 }
+
+export default Modal;

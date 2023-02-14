@@ -5,9 +5,10 @@ import '../src/css/bootstrap.css';
 import '../src/css/icons.css';
 
 function App() {
+  const baseUrl="http://localhost:40774";
   return (
-    <div className="App">
-     <SignUp/>
+    <div >
+     <SignUp baseUrl={baseUrl}/>
  
     </div>
   );
