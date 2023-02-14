@@ -4,9 +4,11 @@ import DatePicker from "react-datepicker";
 //import 'react-datepicker/src/stylesheets/mixins.scss';
 import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
+import Preloader from "../Preloader/Preloader";
 
 function SignUp(props) {
   const [startDate, setStartDate] = useState(new Date());
+  const [preloaderState, setPreloader] = useState(false);
   const [passwordsVisible, setPasswordsVisible] = useState({
     passwordVisible: false,
     passwordAgainVisible: false,
@@ -103,7 +105,9 @@ function SignUp(props) {
 
   return (
     <div className="col-md-4">
-   
+
+<Preloader isActive={preloaderState}/>
+
       <div className="clearfix  form-group">
         <label className="col-md-4">Username</label>
         <div className="col-md-8">
