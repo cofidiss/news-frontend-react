@@ -5,10 +5,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
 import Preloader from "../Preloader/Preloader";
+import Modal from "../Modal/Modal";
+
 
 function SignUp(props) {
+  const [modalState, setModalState] = useState({isOpen:false,header:undefined,content:null,negativeOnClick:undefined,positiveOnClick:undefined});
+
   const [startDate, setStartDate] = useState(new Date());
-  const [preloaderState, setPreloader] = useState(false);
+  const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
   const [passwordsVisible, setPasswordsVisible] = useState({
     passwordVisible: false,
     passwordAgainVisible: false,
@@ -80,7 +84,10 @@ function SignUp(props) {
     }
   };
 
-  const onSaveClick = (event) => {};
+  const onSaveClick = (event) => {
+
+    setIsPreloaderOpen(true);
+  };
 
   const onPasswordVisibleClick = (event) => {
     debugger;
@@ -105,8 +112,8 @@ function SignUp(props) {
 
   return (
     <div className="col-md-4">
-
-<Preloader isActive={preloaderState}/>
+<Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+<Preloader isOpen={isPreloaderOpenState}/>
 
       <div className="clearfix  form-group">
         <label className="col-md-4">Username</label>

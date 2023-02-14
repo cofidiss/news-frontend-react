@@ -3,24 +3,26 @@ import { Button, Modal } from 'semantic-ui-react'
 
 function Modal(props){
 
-var isModalOpen = props.isModalOpen;
+  var modalHeader = props.header;
+  var modalContent = props.Content;
+
+var isOpen = props.isOpen;
 var negativeOnClick = props.negativeOnClick;
-var positiceOnClick = props.positiceOnClick;
+var positiveOnClick = props.positiveOnClick;
 <Modal
         dimmer="blurring"
-        open={isModalOpen}
+        open={isOpen}
   
       >
-        <Modal.Header>Use Google's location service?</Modal.Header>
+        <Modal.Header>{modalHeader}</Modal.Header>
         <Modal.Content>
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+       {modalContent}
         </Modal.Content>
         <Modal.Actions>
-          <Button negative onClick={}>
+          <Button negative onClick={positiveOnClick}>
             Disagree
           </Button>
-          <Button positive >
+          <Button positive onClick={negativeOnClick}>
             Agree
           </Button>
         </Modal.Actions>

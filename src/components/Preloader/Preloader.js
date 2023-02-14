@@ -1,8 +1,8 @@
 import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
 function Preloader(props){
 
-var isActive = props.isActive === true ? props.isActive :false;
-return (  <Dimmer active={isActive} inverted page>
+var isOpen = props.isOpen === true ? props.isOpen :false;
+return (  <Dimmer active={isOpen} inverted page>
     <Loader>Loading</Loader>
   </Dimmer>);
 
