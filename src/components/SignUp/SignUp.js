@@ -6,11 +6,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
+import * as bootstrap from '../../css/bootstrap.module.css';
 
 
 function SignUp(props) {
   const baseUrl = props.baseUrl;
-  const [modalState, setModalState] = useState({isOpen:false,header:undefined,content:null,negativeOnClick:undefined,positiveOnClick:undefined});
+  const [modalState, setModalState] = useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
 
   const [startDate, setStartDate] = useState(new Date());
   const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
@@ -105,11 +106,11 @@ function SignUp(props) {
 if (x.hasError){
 return Promise.reject(x.message);
 }
-setModalState({isOpen:true,content:x.message});
+setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
 
   }).catch(x=> {
 debugger;
-    setModalState({isOpen:true,content:x});
+    setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
 
   }).finally( () =>setIsPreloaderOpen(false))
   };
@@ -136,9 +137,9 @@ debugger;
   };
 
   return (
-    <div>  <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+    <div>  <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
     <Preloader isOpen={isPreloaderOpenState}/>
-    <div className="col-md-4">
+    <div className={bootstrap.clearfix}>
 
 
       <div className="clearfix  form-group">
