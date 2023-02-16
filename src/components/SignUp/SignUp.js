@@ -6,8 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
-import * as bootstrap from '../../css/bootstrap.module.css';
-
+import  bootstrap from '../../css/bootstrap.module.css';
+import  icons from '../../css/icons.module.css';
 
 function SignUp(props) {
   const baseUrl = props.baseUrl;
@@ -108,7 +108,9 @@ return Promise.reject(x.message);
 }
 setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
 
-  }).catch(x=> {
+  }, x=> Promise.reject("Unknown Error Occured")
+  
+  ).catch(x=> {
 debugger;
     setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
 
@@ -139,14 +141,14 @@ debugger;
   return (
     <div>  <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
     <Preloader isOpen={isPreloaderOpenState}/>
-    <div className={bootstrap.clearfix}>
+    <div className={bootstrap["col-md-4"]}>
 
 
-      <div className="clearfix  form-group">
-        <label className="col-md-4">Username</label>
-        <div className="col-md-8">
+      <div className={`${bootstrap["clearfix"]} ${bootstrap["form-group"]}`}>
+        <label className={`${bootstrap["col-md-4"]}`}>Username</label>
+        <div className={`${bootstrap["col-md-8"]}`}>
           <input
-            className="form-control"
+            className={`${bootstrap["form-control"]}`}
             onChange={onFormChange}
             type="text"
             placeholder="Username"
@@ -155,12 +157,12 @@ debugger;
           />
         </div>
       </div>
-      <div className="clearfix  form-group">
-        <label className="col-md-4">E-Mail</label>
-        <div className="col-md-8">
+      <div className={`${bootstrap["clearfix"]} ${bootstrap["form-group"]}`}>
+        <label className={`${bootstrap["col-md-4"]} `}>E-Mail</label>
+        <div className={`${bootstrap["col-md-8"]} `}>
           <input
             type="text"
-            className="form-control"
+            className={`${bootstrap["form-control"]} `}
             placeholder="e-mail"
             onChange={onFormChange}
             id="email"
@@ -168,9 +170,9 @@ debugger;
           />
         </div>
       </div>
-      <div className="clearfix  form-group">
-        <label className="col-md-4">Password</label>
-        <div className="col-md-8">
+      <div className={`${bootstrap["clearfix"]} ${bootstrap["form-group"]} `}>
+        <label className={`${bootstrap["col-md-4"]} `}>Password</label>
+        <div className={`${bootstrap["col-md-8"]} `}>
           <div style={{ display: "flex",marginBottom: "0.5rem" }}>
             <input
               type={passwordsVisible.passwordVisible ? "text" : "password"}
@@ -179,21 +181,21 @@ debugger;
                 borderTopRightRadius: 0,
                 borderBottomRightRadius: 0,
               }}
-              className="form-control"
+              className={`${bootstrap["form-control"]} `}
               placeholder="Password"
               onChange={onFormChange}
               id="password"
               value={formState.password}
             />
-            <div class="input-group-addon"style={{ display: "flex",justifyContent: "center",
+            <div className={`${bootstrap["input-group-addon"]} `}style={{ display: "flex",justifyContent: "center",
     alignItems: "center"}}>
               <i
                 id="passwordVisibleIcon"
                 onClick={onPasswordVisibleClick}
                 className={
                   passwordsVisible.passwordVisible
-                    ? "fa fa-eye"
-                    : "fa fa-eye-slash"
+                  ? `${icons["fa"]} ${icons["fa-eye"]}`
+                  : `${icons["fa"]} ${icons["fa-eye-slash"]}`
                 }
                 aria-hidden="true"
               ></i>
@@ -203,21 +205,21 @@ debugger;
             <input
               type={passwordsVisible.passwordAgainVisible ? "text" : "password"}
               style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-              className="form-control"
+              className={`${bootstrap["form-control"]} `}
               placeholder="Password Again"
               onChange={onFormChange}
               id="passwordAgain"
               value={formState.passwordAgain}
             />
-               <div class="input-group-addon" style={{ display: "flex",justifyContent: "center",
+               <div className={`${bootstrap["input-group-addon"]} `} style={{ display: "flex",justifyContent: "center",
     alignItems: "center"}}>
             <i
               id="passwordAgainVisibleIcon"
               onClick={onPasswordVisibleClick}
               className={
                 passwordsVisible.passwordAgainVisible
-                  ? "fa fa-eye"
-                  : "fa fa-eye-slash"
+                ? `${icons["fa"]} ${icons["fa-eye"]}`
+                : `${icons["fa"]} ${icons["fa-eye-slash"]}`
               }
               aria-hidden="true"
             ></i>
@@ -228,12 +230,12 @@ debugger;
 
       </div>
 
-      <div className="clearfix  form-group">
-        <label className="col-md-4">Birthdate</label>
-        <div className="col-md-8">
+      <div className={`${bootstrap["clearfix"]} ${bootstrap["form-group"]} `}>
+        <label className={`${bootstrap["col-md-4"]}  `}>Birthdate</label>
+        <div className={`${bootstrap["col-md-8"]}  `}>
           <DatePicker
             showIcon
-            className="form-control"
+            className={`${bootstrap["form-control"]}  `}
             selected={formState.birthDate}
             onChange={(date) =>
               setForm((prevState) => {
@@ -243,7 +245,7 @@ debugger;
           />
         </div>
       </div>
-      <button className="btn btn-primary"  onClick={onSaveClick}>SignUp</button>
+      <button className={`${bootstrap["btn"]}  ${bootstrap["btn-primary"]} `}  onClick={onSaveClick}>SignUp</button>
     </div>
     </div>
   );
