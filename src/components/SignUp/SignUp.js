@@ -52,7 +52,7 @@ function SignUp(props) {
         setErrorMessage((prevState) => {
           return {
             ...prevState,
-            password: "Lütfen 2 alana da aynı parolayı giriniz",
+            password: "Passwords does not match!",
           };
         });
       }
@@ -70,7 +70,7 @@ function SignUp(props) {
         setErrorMessage((prevState) => {
           return {
             ...prevState,
-            password: "Lütfen 2 alana da aynı parolayı giriniz",
+            password: "Passwords does not match!",
           };
         });
       }
@@ -90,7 +90,7 @@ function SignUp(props) {
 
     setIsPreloaderOpen(true);
 
-    fetch(`${baseUrl}/api/Users/SignUp`, {
+    fetch(`${baseUrl}/api/User/SignUp`, {
       method: 'POST', // or 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -139,10 +139,12 @@ debugger;
   };
 
   return (
-    <div>  <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+    <div className={`${bootstrap["clearfix"]}`}>  
+      
+      <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
     <Preloader isOpen={isPreloaderOpenState}/>
-    <div className={bootstrap["col-md-4"]}>
-
+    <div className={`${bootstrap["col-md-4"]} ${bootstrap["clearfix"]}`} style={{float:"none",margin:"auto"}}>
+<h2  className={`${bootstrap["form-group"]}`} style={{textAlign:""}}>SignUp</h2>
 
       <div className={`${bootstrap["clearfix"]} ${bootstrap["form-group"]}`}>
         <label className={`${bootstrap["col-md-4"]}`}>Username</label>
