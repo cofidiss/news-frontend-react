@@ -144,7 +144,7 @@ debugger;
       <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
     <Preloader isOpen={isPreloaderOpenState}/>
     <div className={`${bootstrap["col-md-4"]} ${bootstrap["clearfix"]}`} style={{float:"none",margin:"auto"}}>
-<h2  className={`${bootstrap["form-group"]}`} style={{textAlign:""}}>SignUp</h2>
+<h2  className={`${bootstrap["form-group"]}`} style={{textAlign:"center"}}>SignUp</h2>
 
       <div className={`${bootstrap["clearfix"]} ${bootstrap["form-group"]}`}>
         <label className={`${bootstrap["col-md-4"]}`}>Username</label>
