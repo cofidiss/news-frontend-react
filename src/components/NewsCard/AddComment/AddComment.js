@@ -1,15 +1,16 @@
 
 import { useState, useEffect } from "react";
-import Preloader from "../Preloader/Preloader";
-import Modal from "../Modal/Modal";
-import { Button} from 'semantic-ui-react'
+import Preloader from "../../Preloader/Preloader";
+import Modal from "../../Modal/Modal";
+import { Button} from 'semantic-ui-react';
 
 
 function AddComment(props){
+  const newsId= props.newsId;
     const baseUrl = props.baseUrl;
     const [modalState, setModalState] = useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
     const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
-    const [commentState, setComment] = useState({body:null});
+    const [formState, setForm] = useState({comment:null,newsId:newsId});
 
 
     const onSubmitClick = e =>{
@@ -45,12 +46,12 @@ function AddComment(props){
       };
     
 
-    }
+  
 
 
 const onCommentChange = e =>{
 
-    setComment(e.target.value);
+  setForm(prevState => {return {...prevState,comment:e.target.value}; });
 };
 
 return (
@@ -58,12 +59,15 @@ return (
       
 <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
     <Preloader isOpen={isPreloaderOpenState}/>
-<input type="text" onChange={onCommentChange} value={commentState.body}/>
+<input type="text" onChange={onCommentChange} value={formState.comment}/>
 
 <Button onClick={onSubmitClick}>Submit</Button>
 
 </div>
 
 
-),
+);
+
+}
+export default AddComment;
 
