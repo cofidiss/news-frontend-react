@@ -2,19 +2,20 @@
 import { useState, useEffect } from "react";
 import Preloader from "../../Preloader/Preloader";
 import Modal from "../../Modal/Modal";
-import { Button} from 'semantic-ui-react';
+import { Button,Form} from 'semantic-ui-react';
 
 
 function AddComment(props){
+  debugger;
   const newsId= props.newsId;
     const baseUrl = props.baseUrl;
     const [modalState, setModalState] = useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
     const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
     const [formState, setForm] = useState({comment:null,newsId:newsId});
-
+const setNeedToFetchCommentState = props.setNeedToFetchCommentState;
 
     const onSubmitClick = e =>{
-
+debugger;
 
         setIsPreloaderOpen(true);
 
@@ -34,7 +35,9 @@ function AddComment(props){
     if (x.hasError){
     return Promise.reject(x.message);
     }
-    setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
+    setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=>{ 
+      setModalState({isOpen:false});setNeedToFetchCommentState(true);
+    }});
     
       }, x=> Promise.reject("Unknown Error Occured")
       
@@ -59,9 +62,12 @@ return (
       
 <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
     <Preloader isOpen={isPreloaderOpenState}/>
-<input type="text" onChange={onCommentChange} value={formState.comment}/>
 
-<Button onClick={onSubmitClick}>Submit</Button>
+   
+<Form reply>
+      <Form.TextArea  onChange={onCommentChange} value={formState.comment}/>
+      <Button onClick={onSubmitClick} content='Comment' labelPosition='left' icon='add' primary />
+    </Form>
 
 </div>
 
