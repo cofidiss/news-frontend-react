@@ -9,7 +9,7 @@ function App() {
   const baseUrl="http://localhost:40774/asdas/asd";
   return (
     <div >
-    
+     <NewsCard newsId={11}  baseUrl={baseUrl}/>
      <AddNews categoryId={1}  baseUrl={baseUrl}/>
     </div>
   );

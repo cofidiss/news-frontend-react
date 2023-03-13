@@ -59,9 +59,9 @@ function AddNews(props) {
     var attachments = [];
     var videos = [];
     var addNewsForm = document.querySelector("#addNewsForm");
-    var imageFiles = addNewsForm.querySelector("#images").files;
-    var attachmentsFiles = addNewsForm.querySelector("#attachments").files;
-    var videosFiles = addNewsForm.querySelector("#videos").files;
+    var imageFiles = addNewsForm.querySelector("#images-file").files;
+    var attachmentsFiles = addNewsForm.querySelector("#attachments-file").files;
+    var videosFiles = addNewsForm.querySelector("#videos-file").files;
     var fileProcessPromises = [];
     for (let element of imageFiles) {
       fileProcessPromises.push(
@@ -183,7 +183,7 @@ function AddNews(props) {
       />
       <Preloader isOpen={isPreloaderOpenState} />
 
-      <button onClick={onSaveClick}> Save</button>
+
 
       <Form>
         <Form.Field>
@@ -248,7 +248,7 @@ function AddNews(props) {
           <p id="video-names"></p>
         </Form.Group>
 
-        <Form.Button>Submit</Form.Button>
+        <Form.Button onClick={onSaveClick}>Submit</Form.Button>
       </Form>
     </div>
   );
