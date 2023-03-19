@@ -3,6 +3,8 @@ import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
 import { Form } from "semantic-ui-react";
 function AddNews(props) {
+  console.log("addnews rendered")
+  debugger;
   const baseUrl = props.baseUrl;
   const [modalState, setModalState] = useState({
     isOpen: false,
@@ -13,7 +15,11 @@ function AddNews(props) {
     negativeOnClick: null,
     positiveOnClick: null,
   });
-  const [selectedFileNameState, setSelectedFileNameState] = useState({imageFiles:[],attachmentsFiles:[],videosFiles:[]});
+  const [selectedFileNameState, setSelectedFileNameState] = useState({
+    imageFiles: [],
+    attachmentsFiles: [],
+    videosFiles: [],
+  });
   const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
   function getBase64AndFileName(file) {
     const reader = new FileReader();
@@ -151,45 +157,60 @@ function AddNews(props) {
 
   const onFileElementsChange = (e) => {
     debugger;
-   console.log("file change")
+    console.log("file change");
     var element = e.target;
     var fileNamesArr = [];
-
-    if (element.id === "images-file") {
-      for (let i = 0; i < element.files.length; i++) {
-       var fileNameElement = (<p style={{display: "flex"}}> {element.files[i].name }<i onClick={onRemoveFileClick} fileIndex={i} fileElementId="images-file" className="remove icon"></i></p>);
-       fileNamesArr.push(fileNameElement);
+    var   fileElementId="";
+    for (let i = 0; i < element.files.length; i++) {      
+      var fileNameElement = (
+        <div style={{ display: "flex" }}>
+          {" "}
+          <p style={{  wordBreak: "break-all" }}>
+            {element.files[i].name}{" "}
+          </p>{" "}
+          <i
+            onClick={onRemoveFileClick}
+            fileindex={i}
+            fileelementid={element.id}
+            className="remove icon"
+          ></i>{" "}
+        </div>
+      );
+      fileNamesArr.push(fileNameElement);
+    }
+    
+    
+    setSelectedFileNameState((prevState) => {
+      switch (element.id) {
+        case 'images-file':
+          return { ...prevState, imageFiles: fileNamesArr };
+          break;
+        case 'attachments-file':
+          return { ...prevState, attachmentsFiles: fileNamesArr };
+        case 'videos-file':
+          return { ...prevState, videosFiles: fileNamesArr };
+          break;
+        default:
+throw  Error("element with id is not recognized. id: " + element.id);
       }
-      setSelectedFileNameState(prevState => {return {...prevState,imageFiles:fileNamesArr}});
-    }
-    if (element.id === "attachments-file") {
-      for (let i = 0; i < element.files.length; i++) {
-        var fileNameElement = (<p style={{display: "flex"}}>{element.files[i].name }<i onClick={onRemoveFileClick} fileIndex={i} fileElementId="attachments-file" className="remove icon"></i></p>);
-        fileNamesArr.push(fileNameElement);
-       }
-       setSelectedFileNameState(prevState => {return {...prevState,attachmentsFiles:fileNamesArr}});
-    }
-    if (element.id === "videos-file") {
-      for (let i = 0; i < element.files.length; i++) {
-        var fileNameElement = (<p style={{display: "flex"}} >{element.files[i].name }<i onClick={onRemoveFileClick} fileIndex={i} fileElementId="videos-file" className="remove icon"></i></p>);
-        fileNamesArr.push(fileNameElement);
-       }
-       setSelectedFileNameState(prevState => {return {...prevState,videosFiles:fileNamesArr}});
-    }
-  };
-const onRemoveFileClick =  (e) =>{
-  
-  var fileElement =  document.querySelector("#addNewsForm " +  "#" + e.target.getAttribute("fileElementId"));
-  var fileIndex = parseInt(  e.target.getAttribute("fileIndex"));
-  var fileBuffer = new DataTransfer();
-  for (let i = 0; i < fileElement.files.length; i++) {
 
-    if (fileIndex !== i)
-        fileBuffer.items.add(fileElement.files[i]);
-}
-fileElement.files = fileBuffer.files;
-fileElement.dispatchEvent(new Event("change",{bubbles:true}));
-}
+      
+    });
+ 
+
+  };
+  const onRemoveFileClick = (e) => {
+    var fileElement = document.querySelector(
+      "#addNewsForm " + "#" + e.target.getAttribute("fileElementId")
+    );
+    var fileIndex = parseInt(e.target.getAttribute("fileIndex"));
+    var fileBuffer = new DataTransfer();
+    for (let i = 0; i < fileElement.files.length; i++) {
+      if (fileIndex !== i) fileBuffer.items.add(fileElement.files[i]);
+    }
+    fileElement.files = fileBuffer.files;
+    fileElement.dispatchEvent(new Event("change", { bubbles: true }));
+  };
   return (
     <div id="addNewsForm">
       <Modal
@@ -202,8 +223,6 @@ fileElement.dispatchEvent(new Event("change",{bubbles:true}));
         positiveOnClick={modalState.positiveOnClick}
       />
       <Preloader isOpen={isPreloaderOpenState} />
-
-
 
       <Form>
         <Form.Field>
@@ -228,54 +247,55 @@ fileElement.dispatchEvent(new Event("change",{bubbles:true}));
           />
         </Form.Field>
 
-        <Form.Group inline>
-          <div> 
-          <Form.Button onClick={onUploadButtonsClick} id="imageUploadButton">
-            Images
-          </Form.Button>
-          <input
-            type="file"
-            className="hidden"
-            onChange={onFileElementsChange}
-            id="images-file"
-            multiple
-            style={{display: "none"}}
-          />
-         {selectedFileNameState.imageFiles}
-         </div>
-         <div> 
-          <Form.Button
-            onClick={onUploadButtonsClick}
-            id="attachmentUploadButton"
-          >
-            Attachments
-          </Form.Button>
-          <input
-            type="file"
-            className="hidden"
-            onChange={onFileElementsChange}
-            id="attachments-file"
-            style={{display: "none"}}
-            multiple
-          />
+        <div style={{ display: "flex" }}>
+          <div style={{ width: "33%" }}>
+            <Form.Button onClick={onUploadButtonsClick} id="imageUploadButton">
+              Images
+            </Form.Button>
+            <input
+              type="file"
+              className="hidden"
+              onChange={onFileElementsChange}
+              id="images-file"
+              multiple
+              style={{ display: "none" }}
+            />
+            {selectedFileNameState.imageFiles}
+          </div>
+          <div style={{ width: "33%" }}>
+            <Form.Button
+              onClick={onUploadButtonsClick}
+              id="attachmentUploadButton"
+            >
+              Attachments
+            </Form.Button>
+            <input
+              type="file"
+              className="hidden"
+              onChange={onFileElementsChange}
+              id="attachments-file"
+              style={{ display: "none" }}
+              multiple
+            />
 
-{selectedFileNameState.attachmentsFiles}
-</div>         <div> 
-          <Form.Button onClick={onUploadButtonsClick} id="videoUploadButton">
-            Videos
-          </Form.Button>
-          <input
-            type="file"
-            className="hidden"
-            onChange={onFileElementsChange}
-            id="videos-file"
-            style={{display: "none"}}
-            multiple
-          />
-       
-{selectedFileNameState.videosFiles}
-</div>  
-        </Form.Group>
+            {selectedFileNameState.attachmentsFiles}
+          </div>{" "}
+          <div style={{ width: "33%" }}>
+            <Form.Button onClick={onUploadButtonsClick} id="videoUploadButton">
+              Videos
+            </Form.Button>
+            <input
+              type="file"
+              className="hidden"
+              onChange={onFileElementsChange}
+              id="videos-file"
+              style={{ display: "none" }}
+              multiple
+            />
+
+            {selectedFileNameState.videosFiles}
+          </div>
+        </div>
 
         <Form.Button onClick={onSaveClick}>Submit</Form.Button>
       </Form>
