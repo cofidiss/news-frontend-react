@@ -10,12 +10,13 @@ import NewsNavbar from "./components/NewsNavbar/NewsNavbar";
 
 
 function App() {
-  const baseUrl="http://localhost:40774/asdas/asd";
+  const baseUrl="http://localhost:40774";
   return (
     <div >
      {/* <NewsCard newsId={11}  baseUrl={baseUrl}/>
      <AddNews categoryId={1}  baseUrl={baseUrl}/> */}
-     <NewsNavbar />
+     <NewsNavbar  baseUrl={baseUrl}/>
+     <NewsList categoryId={1} baseUrl={baseUrl}/>
     </div>
   );
 }

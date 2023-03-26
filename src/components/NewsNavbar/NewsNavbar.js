@@ -10,30 +10,43 @@ import NewsTab from "../NewsTab/NewsTab";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
+import Preloader from "../Preloader/Preloader";
+import Modal from "../Modal/Modal";
 function NewsNavbar(props) {
-  debugger;
+const baseUrl = props.baseUrl;
   const [selectedCategoryId, setSelectedCategoryId] = React.useState(null);
   const [selectedTabValue, setselectedTabValue] = React.useState(null);
-  const [categoriesState, setCategoriesState] = React.useState([
-    {
-      id: 1,
-      name: "ktg1",
-      htmlElement: null,
-      children: [
-        { id: -1, name: "ktg1child1" },
-        { id: -2, name: "ktg1child2" },
-      ],
-    },
-    {
-      id: 2,
-      name: "ktg2",
-      htmlElement: null,
-      children: [
-        { id: -3, name: "ktg2child1" },
-        { id: -4, name: "ktg2child2" },
-      ],
-    },
-  ]);
+  const [categoriesState, setCategoriesState] = React.useState([]);
+  const [isPreloaderOpenState, setIsPreloaderOpen] = React.useState(false);
+  const [modalState, setModalState] = React.useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
+
+  React.useEffect(()=> {
+
+    fetch(`${baseUrl}/api/Category/GetCategoriesForNavBar`, {
+      method: 'GET', // or 'PUT', 
+  
+        })
+      .then((response) => {
+  if (!response.ok){
+    debugger;
+  return Promise.reject("Unknown Error Occured");
+  }
+  return response.json(); }).then(x=> {
+  if (x.hasError){
+  return Promise.reject(x.message);
+  }
+  setCategoriesState(x);
+  
+  }, x=> Promise.reject("Unknown Error Occured")
+  
+  ).catch(x=> {
+  
+    setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
+  
+  }).finally( () =>setIsPreloaderOpen(false))
+  },[]);
+
+
   const onTabClick = (event, newValue) => {
     setselectedTabValue(newValue);
   };
@@ -56,6 +69,9 @@ function NewsNavbar(props) {
   }
   return (
     <div>
+       
+       <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+    <Preloader isOpen={isPreloaderOpenState}/>
       <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: "background.paper" }}>
         <Tabs
           value={selectedTabValue}
