@@ -5,10 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-css/semantic.min.css'
 import Modal from "../src/components/Modal/Modal";
+import {
+    BrowserRouter,
+    RouterProvider,
+    Route,
+    Link,
+  } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+<BrowserRouter><App></App></BrowserRouter>
 
-<App></App>
 
 );
 

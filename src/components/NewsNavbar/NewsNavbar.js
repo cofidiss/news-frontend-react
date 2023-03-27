@@ -12,9 +12,14 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
+import { useSearchParams,NavLink } from "react-router-dom";
+import NewsList from "../NewsList/NewsList";
 function NewsNavbar(props) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  console.log("NewsNavbar rendered");
 const baseUrl = props.baseUrl;
-  const [selectedCategoryId, setSelectedCategoryId] = React.useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = React.useState( searchParams.get("categoryId")!== null ?parseInt(searchParams.get("categoryId")) : null);
   const [selectedTabValue, setselectedTabValue] = React.useState(null);
   const [categoriesState, setCategoriesState] = React.useState([]);
   const [isPreloaderOpenState, setIsPreloaderOpen] = React.useState(false);
@@ -35,6 +40,10 @@ const baseUrl = props.baseUrl;
   if (x.hasError){
   return Promise.reject(x.message);
   }
+  if (searchParams.get("categoryId")=== null){
+    setSearchParams(prevSearchparam => {return {...prevSearchparam,categoryId:x[0].id}});
+  
+  }
   setCategoriesState(x);
   
   }, x=> Promise.reject("Unknown Error Occured")
@@ -44,7 +53,7 @@ const baseUrl = props.baseUrl;
     setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
   
   }).finally( () =>setIsPreloaderOpen(false))
-  },[]);
+  },[selectedCategoryId]);
 
 
   const onTabClick = (event, newValue) => {
@@ -52,17 +61,21 @@ const baseUrl = props.baseUrl;
   };
 
   
-  var selectedCategoryName = null;
-  var selectedCategoryParentName = null;
+  var selectedCategoryNameAndId = {id:null,name:null};
+  var selectedCategoryParentNameAndId = {id:null,name:null};
+
+  var selectedCategoryParentId = null;
   for (let categoryState of categoriesState) {
+    debugger;
     if (categoryState.id === selectedCategoryId) {
-      selectedCategoryParentName = categoryState.name;
+      selectedCategoryParentNameAndId = {id:selectedCategoryId,name:categoryState.name} ;
+
       break;
     }
     for (let childCategoryState of categoryState.children) {
       if (childCategoryState.id === selectedCategoryId) {
-        selectedCategoryParentName = categoryState.name;
-        selectedCategoryName = childCategoryState.name;
+        selectedCategoryParentNameAndId = {id:selectedCategoryId,name:categoryState.name} ;
+         selectedCategoryNameAndId = {id:childCategoryState.id,name:childCategoryState.name};
         break;
       }
     }
@@ -95,15 +108,16 @@ const baseUrl = props.baseUrl;
       </Box>
 
       <Breadcrumbs aria-label="breadcrumb">
-        {selectedCategoryParentName === null ? null:( <Link underline="hover" color="inherit" href="/">
-          {selectedCategoryParentName}
-        </Link> )}
+        {selectedCategoryParentNameAndId.id === null ? null:( <NavLink underline="hover" color="inherit" onClick={x=> {x.preventDefault(); setSearchParams(prevSearchparam => {debugger;prevSearchparam.set("categoryId",selectedCategoryParentNameAndId.id);return prevSearchparam})}  }>
+          {selectedCategoryParentNameAndId.name}
+        </NavLink> )}
        
-        {selectedCategoryName === null ? null: (<Link underline="hover" color="inherit" href="/">
-          {selectedCategoryName}
-        </Link> )}
+        {selectedCategoryNameAndId.id === null ? null: (<NavLink underline="hover" color="inherit" onClick={x=>   setSearchParams(prevSearchparam => {return {...prevSearchparam,categoryId:selectedCategoryNameAndId.id}}) }>
+          {selectedCategoryNameAndId.name}
+        </NavLink> )}
 
       </Breadcrumbs>
+      <NewsList categoryId={selectedCategoryId} baseUrl={baseUrl}/>
     </div>
   );
 }

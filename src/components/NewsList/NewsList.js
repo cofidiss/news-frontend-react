@@ -26,6 +26,7 @@ import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
 
 function NewsList(props){
+  console.log("NewsList rendered");
   const categoryId = props.categoryId;
 const baseUrl = props.baseUrl;
 const [modalState, setModalState] = React.useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
