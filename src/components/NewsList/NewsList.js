@@ -24,8 +24,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
-
+import { useNavigate } from "react-router-dom";
 function NewsList(props){
+  const navigate = useNavigate();
   console.log("NewsList rendered");
   const categoryId = props.categoryId;
 const baseUrl = props.baseUrl;
@@ -71,6 +72,7 @@ return (
         <TableRow
           key={row.id}
           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          onClick={x => navigate("/getNews?newsId=" + row.id)}
         >
           <TableCell component="th" scope="row">
             {row.header}

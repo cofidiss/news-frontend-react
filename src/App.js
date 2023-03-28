@@ -26,6 +26,7 @@ function App() {
       <Route path="/signup" element={<SignUp baseUrl={baseUrl}/>} />
       <Route path="/login" element={<Login baseUrl={baseUrl}/>} />
       <Route path="/newsNavBar" element={<NewsNavbar  baseUrl={baseUrl}/>} />
+      <Route path="/getnews" element={<NewsCard   baseUrl={baseUrl}/>} />
     </Routes>
      
    

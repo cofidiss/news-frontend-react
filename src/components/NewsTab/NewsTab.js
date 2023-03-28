@@ -10,7 +10,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function NewsTab(props){
 debugger;
-const setSelectedCategoryId = props.setSelectedCategoryId;
+const setSelectedCategoryIdQueryParam = props.setSelectedCategoryIdQueryParam;
 const name = props.name;
 const id = props.id;
 const children = props.children;
@@ -26,7 +26,7 @@ const onCategoryClick = e=> {
 	debugger;
 	console.log("clciked");
 	var selectedCategoryid=	e.currentTarget.getAttribute("categoryid");
-	setSelectedCategoryId(parseInt(selectedCategoryid));
+	setSelectedCategoryIdQueryParam(parseInt(selectedCategoryid));
 	setAnchorEl(null);
 }
 const ITEM_HEIGHT = 48;

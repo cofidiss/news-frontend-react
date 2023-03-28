@@ -19,7 +19,11 @@ function NewsNavbar(props) {
   
   console.log("NewsNavbar rendered");
 const baseUrl = props.baseUrl;
-  const [selectedCategoryId, setSelectedCategoryId] = React.useState( searchParams.get("categoryId")!== null ?parseInt(searchParams.get("categoryId")) : null);
+const setSelectedCategoryIdQueryParam = categoryId => {
+  setSearchParams({"categoryId":parseInt(categoryId)});
+};
+
+const selectedCategoryId = parseInt(searchParams.get("categoryId"));
   const [selectedTabValue, setselectedTabValue] = React.useState(null);
   const [categoriesState, setCategoriesState] = React.useState([]);
   const [isPreloaderOpenState, setIsPreloaderOpen] = React.useState(false);
@@ -74,7 +78,7 @@ const baseUrl = props.baseUrl;
     }
     for (let childCategoryState of categoryState.children) {
       if (childCategoryState.id === selectedCategoryId) {
-        selectedCategoryParentNameAndId = {id:selectedCategoryId,name:categoryState.name} ;
+        selectedCategoryParentNameAndId = {id:categoryState.id,name:categoryState.name} ;
          selectedCategoryNameAndId = {id:childCategoryState.id,name:childCategoryState.name};
         break;
       }
@@ -96,7 +100,7 @@ const baseUrl = props.baseUrl;
           {categoriesState.map((x) => {
             return (
               <NewsTab
-                setSelectedCategoryId={setSelectedCategoryId}
+              setSelectedCategoryIdQueryParam={setSelectedCategoryIdQueryParam}
                 id={x.id}
                 name={x.name}
               >
@@ -108,11 +112,11 @@ const baseUrl = props.baseUrl;
       </Box>
 
       <Breadcrumbs aria-label="breadcrumb">
-        {selectedCategoryParentNameAndId.id === null ? null:( <NavLink underline="hover" color="inherit" onClick={x=> {x.preventDefault(); setSearchParams(prevSearchparam => {debugger;prevSearchparam.set("categoryId",selectedCategoryParentNameAndId.id);return prevSearchparam})}  }>
+        {selectedCategoryParentNameAndId.id === null ? null:( <NavLink underline="hover" id={selectedCategoryParentNameAndId.id} color="inherit" onClick={x=> {x.preventDefault(); setSelectedCategoryIdQueryParam(selectedCategoryParentNameAndId.id )}  }>
           {selectedCategoryParentNameAndId.name}
         </NavLink> )}
        
-        {selectedCategoryNameAndId.id === null ? null: (<NavLink underline="hover" color="inherit" onClick={x=>   setSearchParams(prevSearchparam => {return {...prevSearchparam,categoryId:selectedCategoryNameAndId.id}}) }>
+        {selectedCategoryNameAndId.id === null ? null: (<NavLink underline="hover" id={selectedCategoryNameAndId.id } color="inherit"onClick={x=> {x.preventDefault(); setSelectedCategoryIdQueryParam(selectedCategoryNameAndId.id )}  }>
           {selectedCategoryNameAndId.name}
         </NavLink> )}
 

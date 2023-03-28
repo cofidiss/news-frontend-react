@@ -7,12 +7,13 @@ import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { Card, Icon } from "semantic-ui-react";
 import CommentList from "../Comment/CommentList/CommentList";
-
+import { useSearchParams,NavLink } from "react-router-dom";
 
 
 function NewsCard(props) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const baseUrl = props.baseUrl;
-  const newsId = props.newsId;
+  const newsId = parseInt(searchParams.get("newsId"));
   const [newsState, setNews] = useState({
     header: null,
     text: null,
@@ -108,7 +109,8 @@ function NewsCard(props) {
                   })
             }
           />
-        )}  <Card.Content description={<CommentList newsId={newsId}  baseUrl={baseUrl}/> } />    
+        )} 
+         <Card.Content description={<CommentList newsId={newsId}  baseUrl={baseUrl}/> } />    
       </Card>
 
     </div>
