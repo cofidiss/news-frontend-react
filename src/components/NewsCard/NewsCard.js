@@ -11,9 +11,12 @@ import { useSearchParams,NavLink } from "react-router-dom";
 
 
 function NewsCard(props) {
+
+
   const [searchParams, setSearchParams] = useSearchParams();
   const baseUrl = props.baseUrl;
   const newsId = parseInt(searchParams.get("newsId"));
+
   const [newsState, setNews] = useState({
     header: null,
     text: null,
@@ -71,11 +74,12 @@ function NewsCard(props) {
           okOnClick: () => setModalState({ isOpen: false }),
         });
       })
-      .finally(() => setIsPreloaderOpen(false));},[])
+      .finally(() => setIsPreloaderOpen(false));},[newsId])
 
 
   return (
-    <div>
+    <div><Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+    <Preloader isOpen={isPreloaderOpenState}/>
       <Card style={{ width: "40%" }}>
         <Card.Content header={newsState.header} />
         {newsState.images.length === 0 ? null : (
@@ -94,6 +98,7 @@ function NewsCard(props) {
             }
           />
         )}
+
         <Card.Content description={newsState.text} />
         {newsState.videos.length === 0 ? null : (
           <Card.Content
