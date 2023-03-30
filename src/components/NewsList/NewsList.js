@@ -25,6 +25,7 @@ import { visuallyHidden } from '@mui/utils';
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
 import { useNavigate } from "react-router-dom";
+import Button from '@mui/material/Button';
 function NewsList(props){
   debugger;
   const navigate = useNavigate();
@@ -37,48 +38,11 @@ const [newsListState, setnewsListState] = React.useState([]);
 const [isCategoryAdminState, setIsCategoryAdmin] = React.useState(null);
 
 console.log("NewsList rendered " + newsListState);
-React.useEffect(()=> {setIsPreloaderOpen(true);var getNewPromise = fetch(`${baseUrl}/api/News/GetNewsListForCategory?categoryId=${categoryId}`, {
-  method: 'GET', // or 'PUT', 
 
-    }).then((response) => {
-      if (!response.ok){
-      debugger;
-      return Promise.reject("Unknown Error Occured");
-      }
-      return response.json(); }).then(x=> {
-      if (x.hasError){
-      return Promise.reject(x.message);
-      }return x;})
-    var isCategoryAdminPromise  = fetch(`${baseUrl}/api/User/IsCategoryAdmin?categoryId=${categoryId}`, {
-      method: 'POST', // or 'PUT', 
-    
-        }).then((response) => {
-          if (!response.ok){
-          debugger;
-          return Promise.reject("Unknown Error Occured");
-          }
-          return response.json(); }).then(x=> {
-          if (x.hasError){
-          return Promise.reject(x.message);
-          }return x;});
-          Promise.all([getNewPromise,isCategoryAdminPromise])
-  .then(x=> {
-debugger;
-console.log(11);
-setnewsListState(x[0]);
-setIsCategoryAdmin(x[1]);
-}, x=> {console.log(x);return Promise.reject("Unknown Error Occured")}
 
-).catch(x=> {
-  console.log(112);
-setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
-
-}).finally( () =>setIsPreloaderOpen(false))},[categoryId])
-
-const deleteNews = e=> {
-
-  setIsPreloaderOpen(true);
-fetch(`${baseUrl}/api/News/GetNewsListForCategory?categoryId=${categoryId}`, {
+React.useEffect(()=> LoadNewsList(),[categoryId])
+const LoadNewsList = e => {
+  {setIsPreloaderOpen(true);var getNewPromise = fetch(`${baseUrl}/api/News/GetNewsListForCategory?categoryId=${categoryId}`, {
     method: 'GET', // or 'PUT', 
   
       }).then((response) => {
@@ -90,8 +54,61 @@ fetch(`${baseUrl}/api/News/GetNewsListForCategory?categoryId=${categoryId}`, {
         if (x.hasError){
         return Promise.reject(x.message);
         }return x;})
+      var isCategoryAdminPromise  = fetch(`${baseUrl}/api/User/IsCategoryAdmin?categoryId=${categoryId}`, {
+        method: 'POST', // or 'PUT', 
+      
+          }).then((response) => {
+            if (!response.ok){
+            debugger;
+            return Promise.reject("Unknown Error Occured");
+            }
+            return response.json(); }).then(x=> {
+            if (x.hasError){
+            return Promise.reject(x.message);
+            }return x;});
+            Promise.all([getNewPromise,isCategoryAdminPromise])
+    .then(x=> {
+  debugger;
+  console.log(11);
+  setnewsListState(x[0]);
+  setIsCategoryAdmin(x[1]);
+  }, x=> {console.log(x);return Promise.reject("Unknown Error Occured")}
+  
+  ).catch(x=> {
+    console.log(112);
+  setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
+  
+  }).finally( () =>setIsPreloaderOpen(false))}
+}
+const deleteNews = e=> {
+setModalState({isOpen:true,content:"Are you sure to Delete?",type:"question",positiveOnClick:positiveOnClick,negativeOnClick:()=>setModalState({isOpen:false})})
+var newsId = e.target.getAttribute("newsid");
+  function positiveOnClick  (e)  {
+
+    setIsPreloaderOpen(true);
+    fetch(`${baseUrl}/api/News/DeleteNewsAndFiles?newsId=${newsId}`, {
+      method: 'POST', // or 'PUT', 
+    
+        }).then((response) => {
+          if (!response.ok){
+   
+          return Promise.reject("Unknown Error Occured");
+          }
+          return response.json().catch(x=> Promise.reject("Unknown Error Occured"))}).then(x=> {
+          if (x.hasError){
+          return Promise.reject(x.message);
+          }
+          debugger;LoadNewsList();
+          setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
+        }).catch (x=>        {  debugger; setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})})} ).finally(() => setIsPreloaderOpen(false))
+  
+
+  }
 
 }
+
+
+
 
 return (<div> <Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
 <Preloader isOpen={isPreloaderOpenState}/>  <TableContainer component={Paper}>
@@ -99,8 +116,8 @@ return (<div> <Modal isOpen={modalState.isOpen} content={modalState.content} hea
     <TableHead>
       <TableRow>
         <TableCell>Header</TableCell>
-        <TableCell >UploadDate</TableCell>
-        {isCategoryAdminState === true ?        <TableCell onClick={deleteNews }>Delete</TableCell> : null}
+      
+        {isCategoryAdminState === true ?        <TableCell >Delete</TableCell> : null}
       </TableRow>
     </TableHead>
     <TableBody>
@@ -108,13 +125,14 @@ return (<div> <Modal isOpen={modalState.isOpen} content={modalState.content} hea
         <TableRow
           key={row.id}
           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          onClick={x => navigate("/getNews?newsId=" + row.id)}
+        
         >
           <TableCell component="th" scope="row">
-            {row.header}
+            <p  style={{textDecoration: "underline",cursor: "pointer"}} onClick={x => navigate("/getNews?newsId=" + row.id)}>  {row.header} </p>
+            {row.uploadDate}
           </TableCell>
-          <TableCell >{row.uploadDate}</TableCell>
-          {isCategoryAdminState === true ?        <TableCell >Delete Button</TableCell> : null}
+
+          {isCategoryAdminState === true ?        <TableCell ><Button newsid={row.id} onClick={deleteNews }> delete</Button></TableCell> : null}
         </TableRow>
       ))}
     </TableBody>

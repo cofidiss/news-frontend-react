@@ -21,8 +21,9 @@ function App() {
   return (
     <div >
      {/* <NewsCard newsId={11}  baseUrl={baseUrl}/>
-     <AddNews categoryId={1}  baseUrl={baseUrl}/> */}
+    */}
        <Routes>
+       <Route path="/AddNews" element={ <AddNews categoryId={1}  baseUrl={baseUrl}/> } />
       <Route path="/signup" element={<SignUp baseUrl={baseUrl}/>} />
       <Route path="/login" element={<Login baseUrl={baseUrl}/>} />
       <Route path="/newsNavBar" element={<NewsNavbar  baseUrl={baseUrl}/>} />

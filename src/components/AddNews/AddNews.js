@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
 import { Form } from "semantic-ui-react";
+import Select from 'react-select';
 function AddNews(props) {
   console.log("addnews rendered")
   debugger;
@@ -21,6 +22,7 @@ function AddNews(props) {
     videosFiles: [],
   });
   const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
+  const [categoryLovState, setCategoryLovState] = useState([]);
   function getBase64AndFileName(file) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -57,7 +59,44 @@ function AddNews(props) {
       });
     }
   };
+const getCategoryLov = ()=> {
+  setIsPreloaderOpen(true)
+  fetch(`${baseUrl}/api/category/GetCategoryLov`, {
+    method: "GET", // or 'PUT',
+    headers: {
+      "Content-Type": "application/json",
+    }
 
+  })
+    .then((response) => {
+      if (!response.ok) {
+        debugger;
+        return Promise.reject("Unknown Error Occured");
+      }
+      return response.json();
+    })
+    .then(
+      (x) => {
+        if (x.hasError) {
+          return Promise.reject(x.message);
+        }
+        setCategoryLovState(x);
+     
+      },
+      (x) => Promise.reject("Unknown Error Occured")
+    )
+    .catch((x) => {
+      debugger;
+      setModalState({
+        isOpen: true,
+        content: x,
+        type: "fail",
+        okOnClick: () => setModalState({ isOpen: false }),
+      });
+    })
+    .finally(() => setIsPreloaderOpen(false));
+}
+React.useEffect(getCategoryLov,[])
   const onSaveClick = async (e) => {
     setIsPreloaderOpen(true);
 
@@ -225,6 +264,9 @@ throw  Error("element with id is not recognized. id: " + element.id);
       <Preloader isOpen={isPreloaderOpenState} />
 
       <Form>
+      <Select
+        
+      />
         <Form.Field>
           {" "}
           <Form.Input

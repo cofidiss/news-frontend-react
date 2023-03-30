@@ -35,10 +35,10 @@ switch(type) {
     case "question":
       iconClass= "massive question circle outline icon";
       modalActionDiv= (<div>
-     <Button negative onClick={positiveOnClick}>
+     <Button negative onClick={negativeOnClick}>
       No
     </Button>
-    <Button positive onClick={negativeOnClick}>
+    <Button positive onClick={positiveOnClick}>
       Yes
     </Button>
   </div>);
