@@ -80,7 +80,31 @@ const getCategoryLov = ()=> {
         if (x.hasError) {
           return Promise.reject(x.message);
         }
-        setCategoryLovState(x);
+        var categoryOptionList = [];
+        debugger;
+        const getCategoryOption = (category ,categoryLevel) =>  {
+          var categoryPadding = "";
+          for (var level=1; level< categoryLevel;level++ ){
+            categoryPadding += "--";
+          }
+          var option = {value:category.id,label:categoryPadding+ category.name};
+          categoryOptionList.push(option);
+          if (category.children == null){
+return;
+          }
+         for (var category of category.children){
+          debugger;
+          getCategoryOption(category,categoryLevel+1);
+                    }
+
+        }
+        debugger; 
+
+        for (var category of x){
+          getCategoryOption(category,1)
+
+        }
+        setCategoryLovState(categoryOptionList);
      
       },
       (x) => Promise.reject("Unknown Error Occured")
@@ -264,8 +288,10 @@ throw  Error("element with id is not recognized. id: " + element.id);
       <Preloader isOpen={isPreloaderOpenState} />
 
       <Form>
-      <Select
-        
+      <Select            
+
+           name="color"
+           options={categoryLovState}
       />
         <Form.Field>
           {" "}
