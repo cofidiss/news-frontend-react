@@ -7,6 +7,7 @@ import NewsCard from "../src/components/NewsCard/NewsCard";
 import AddNews from "../src/components/AddNews/AddNews";
 import NewsList from "../src/components/NewsList/NewsList";
 import NewsNavbar from "./components/NewsNavbar/NewsNavbar";
+import CategoryCRUD from "./components/CategoryCRUD/CategoryCRUD";
 import {
   BrowserRouter,
   RouterProvider,
@@ -28,6 +29,8 @@ function App() {
       <Route path="/login" element={<Login baseUrl={baseUrl}/>} />
       <Route path="/newsNavBar" element={<NewsNavbar  baseUrl={baseUrl}/>} />
       <Route path="/getnews" element={<NewsCard   baseUrl={baseUrl}/>} />
+      <Route path="/categoryCRUD" element={<CategoryCRUD   baseUrl={baseUrl}/>} />
+      
     </Routes>
      
    
