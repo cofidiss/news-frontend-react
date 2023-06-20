@@ -10,32 +10,42 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Preloader from "../Preloader/Preloader";
 import Modal from "../Modal/Modal";
+import {
+  BrowserRouter,
+  RouterProvider,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
 function CategoryCRUD(props){
+
     const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
     const [modalState, setModalState] = useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
 const baseUrl = props.baseUrl;
     const [categoryListState, setcategoryList] = React.useState([]);
 var deleteCategory = ()=> {};
 
-
-
-    fetch(`${baseUrl}/api/Category/GetCategoryListForCRUD`, {
-        method: 'GET', // or 'PUT', 
+useEffect(() =>{
+  fetch(`${baseUrl}/api/Category/GetCategoryListForCRUD`, {
+      method: 'GET', // or 'PUT', 
+    
+        }).then((response) => {
+          if (!response.ok){
+   
+          return Promise.reject("Unknown Error Occured");
+          }
+          return response.json().catch(x=> Promise.reject("Unknown Error Occured"))}).then(x=> {
+          if (x.hasError){
+          return Promise.reject(x.message);
+          }
+          setcategoryList(x);
+          setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
+        }).catch (x=>        {  setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})})} ).finally(() => setIsPreloaderOpen(false));
       
-          }).then((response) => {
-            if (!response.ok){
-     
-            return Promise.reject("Unknown Error Occured");
-            }
-            return response.json().catch(x=> Promise.reject("Unknown Error Occured"))}).then(x=> {
-            if (x.hasError){
-            return Promise.reject(x.message);
-            }
-            setcategoryList(x);
-            setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
-          }).catch (x=>        {  debugger; setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})})} ).finally(() => setIsPreloaderOpen(false))
+      },[]);
 
-var returnElement =  <div>    <Modal
+
+var returnElement =  <div>  <Modal
 isOpen={modalState.isOpen}
 content={modalState.content}
 header={modalState.header}
@@ -51,6 +61,7 @@ positiveOnClick={modalState.positiveOnClick}
       <TableCell>CategoryId</TableCell>
       <TableCell>CategoryName</TableCell>
       <TableCell>ParentCategoryName</TableCell>
+      <TableCell >Update</TableCell> 
        <TableCell >Delete</TableCell> 
     </TableRow>
   </TableHead>
@@ -65,12 +76,12 @@ positiveOnClick={modalState.positiveOnClick}
           <p>  {row.id} </p>
         </TableCell>
         <TableCell component="td" scope="row">
-          <p>  {row.Name} </p>
+          <p>  {row.name} </p>
         </TableCell>
         <TableCell component="td" scope="row">
-          <p>  {row.ParentName} </p>
+          <p>  {row.parentName} </p>
         </TableCell>
-
+        <TableCell ><Button categoryid={row.id} onClick={updateCategory }> update</Button></TableCell>
      <TableCell ><Button categoryid={row.id} onClick={deleteCategory }> delete</Button></TableCell>
       </TableRow>
     ))}
