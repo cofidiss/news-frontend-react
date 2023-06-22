@@ -13,7 +13,7 @@ var isOpen = props.isOpen;
 var okOnClick = props.okOnClick;
 var negativeOnClick = props.negativeOnClick;
 var positiveOnClick = props.positiveOnClick;
-
+var closeOnClick = props.closeOnClick;
 
 switch(type) {
   case "success":
@@ -42,6 +42,10 @@ switch(type) {
       Yes
     </Button>
   </div>);
+    break;
+    case "popUp":
+      iconClass= "";
+      modalHeader= <div><button onClick={closeOnClick}>çarpı</button></div>;
     break;
   default:
     iconClass = "";
@@ -80,9 +84,10 @@ return (<ModalFromSemanticUI
   <ModalFromSemanticUI.Content>
  {modalContent}
   </ModalFromSemanticUI.Content>
-  <ModalFromSemanticUI.Actions>
+  {modalActionDiv === null ? null :   <ModalFromSemanticUI.Actions>
 {modalActionDiv}
-  </ModalFromSemanticUI.Actions>
+  </ModalFromSemanticUI.Actions>}
+
 </ModalFromSemanticUI>);
 
 }
