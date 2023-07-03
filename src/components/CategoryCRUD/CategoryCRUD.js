@@ -111,10 +111,15 @@ if (isGetCategoryListForCRUDRequired){
 
 }
 
-var updateCategoryClick= ()=> {
+var updateCategoryClick= (event)=> {
+var targetElement = event.target;
+debugger;
+var categoryparentid= parseInt(targetElement.getAttribute("categoryparentid"));
+var categoryname= targetElement.getAttribute("categoryname");
+var categoryid= parseInt(targetElement.getAttribute("categoryid"));
   setModalState({
     isOpen: true,
-    content: <UpdateCategory/>,
+    content: <UpdateCategory  baseUrl={baseUrl} name={categoryname} categoryId={categoryid} categoryParentId={categoryparentid}  />,
     type: "popUp",
     closeOnClick: () => {console.log("closempdal");setModalState({ isOpen: false })}
   });
@@ -161,7 +166,7 @@ var updateCategoryClick= ()=> {
                   <p> {row.parentName} </p>
                 </TableCell>
                 <TableCell>
-                  <Button categoryid={row.id} onClick={updateCategoryClick}>
+                  <Button categoryid={row.id} categoryname={row.name}  categoryparentid={row.parentId}   onClick={updateCategoryClick}>
                     {" "}
                     update
                   </Button>

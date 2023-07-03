@@ -47,7 +47,12 @@ function AddNews(props) {
     body: null,
   });
   const onFormChange = (e) => {
-    var currentElement = e.currentTarget;
+    debugger;
+    var currentElement = e.target;
+ if (currentElement instanceof HTMLElement){
+
+
+ 
     if (currentElement.id === "header") {
       setFormState((prevState) => {
         return { ...prevState, header: currentElement.value };
@@ -57,7 +62,13 @@ function AddNews(props) {
       setFormState((prevState) => {
         return { ...prevState, body: currentElement.value };
       });
-    }
+    }}
+    else {
+
+    
+    setFormState((prevState) => {
+      return { ...prevState, categoryId: e.value };
+    });}
   };
 const getCategoryLov = ()=> {
   setIsPreloaderOpen(true)
@@ -104,6 +115,7 @@ return;
           getCategoryOption(category,1)
 
         }
+        debugger;
         setCategoryLovState(categoryOptionList);
      
       },
@@ -292,6 +304,8 @@ throw  Error("element with id is not recognized. id: " + element.id);
 
            name="color"
            options={categoryLovState}
+           onChange={onFormChange}
+           value={formState.categoryId}
       />
         <Form.Field>
           {" "}
