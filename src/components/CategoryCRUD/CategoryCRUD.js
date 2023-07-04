@@ -114,12 +114,12 @@ if (isGetCategoryListForCRUDRequired){
 var updateCategoryClick= (event)=> {
 var targetElement = event.target;
 debugger;
-var categoryparentid= parseInt(targetElement.getAttribute("categoryparentid"));
+var categoryparentid= targetElement.getAttribute("categoryparentid")=== null ? null:parseInt(targetElement.getAttribute("categoryparentid"));
 var categoryname= targetElement.getAttribute("categoryname");
 var categoryid= parseInt(targetElement.getAttribute("categoryid"));
   setModalState({
     isOpen: true,
-    content: <UpdateCategory  baseUrl={baseUrl} name={categoryname} categoryId={categoryid} categoryParentId={categoryparentid}  />,
+    content: <UpdateCategory setIsGetCategoryListForCRUDRequired={setIsGetCategoryListForCRUDRequired} baseUrl={baseUrl} name={categoryname} categoryId={categoryid} categoryParentId={categoryparentid}  />,
     type: "popUp",
     closeOnClick: () => {console.log("closempdal");setModalState({ isOpen: false })}
   });

@@ -10,7 +10,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Html } from "@mui/icons-material";
 import { Button } from "semantic-ui-react";
 function UpdateCategory(props) {
-
+var setIsGetCategoryListForCRUDRequired = props.setIsGetCategoryListForCRUDRequired;
   const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
   const [modalState, setModalState] = useState({
     isOpen: false
@@ -20,7 +20,7 @@ function UpdateCategory(props) {
   const [formState, setForm] = React.useState({
     name: props.name,
     id:categoryId,
-    parentId: props.categoryParentId,
+    parentId: props.categoryParentId === null ? -1 : props.categoryParentId,
     categoryLov:[]
   });
 
@@ -31,7 +31,8 @@ var onUpdateClick = e => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      ...formState
+      ...formState,
+      parentId:formState.parentId === -1 ? null: formState.parentId
     }),
   })
     .then((response) => {
@@ -64,7 +65,7 @@ var onUpdateClick = e => {
         okOnClick: () => setModalState({ isOpen: false }),
       });
     })
-    .finally(() => setIsPreloaderOpen(false));
+    .finally(() => setIsPreloaderOpen(false)).then(x=> setIsGetCategoryListForCRUDRequired(true));
   
 
 }
