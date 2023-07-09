@@ -18,7 +18,7 @@ import {
 
 function App() {
   console.log("app rendered");
-  const baseUrl="http://localhost:40774";
+  const baseUrl="http://localhost:3000";
   return (
     <div >
      {/* <NewsCard newsId={11}  baseUrl={baseUrl}/>
@@ -32,7 +32,20 @@ function App() {
       <Route path="/categoryCRUD" element={<CategoryCRUD   baseUrl={baseUrl}/>} />
       
     </Routes>
-     
+    <Link to="/AddNews">AddNews</Link>
+    <br></br>
+    <Link to="/signup">signup</Link>
+    <br></br>
+    <Link to="/login">login</Link>
+    <br></br>
+    <Link to="/newsNavBar">newsNavBar</Link>
+    <br></br>
+    <Link to="/getnews">getnews</Link>
+    <br></br>
+    <Link to="/categoryCRUD">categoryCRUD</Link>
+
+
+
    
     </div>
   );
