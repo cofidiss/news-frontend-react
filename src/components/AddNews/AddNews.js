@@ -4,6 +4,7 @@ import Modal from "../Modal/Modal";
 import { Form } from "semantic-ui-react";
 import Select from 'react-select';
 function AddNews(props) {
+  const shouldGetAuthInfoCalledCounter= props.shouldGetAuthInfoCalledCounter;
   console.log("addnews rendered")
   debugger;
   const baseUrl = props.baseUrl;
@@ -82,6 +83,7 @@ const getCategoryLov = ()=> {
     .then((response) => {
       if (!response.ok) {
         debugger;
+  
         return Promise.reject("Unknown Error Occured");
       }
       return response.json();
@@ -186,8 +188,12 @@ React.useEffect(getCategoryLov,[])
         .then((response) => {
           if (!response.ok) {
             debugger;
+            if (response.status == 401){
+              shouldGetAuthInfoCalledCounter(pre=> ++pre);
+            }
             return Promise.reject("Unknown Error Occured");
           }
+          
           return response.json();
         })
         .then(

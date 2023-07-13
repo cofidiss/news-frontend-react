@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import * as React from 'react';
 import './App.css';
 import SignUp from "../src/components/SignUp/SignUp";
 import Login from "../src/components/Login/Login";
@@ -15,18 +16,23 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-
+import AppBar from "./components/AppBar/AppBar";
 function App() {
+  debugger;
   console.log("app rendered");
+  const [shouldGetAuthInfoCalledState, setShouldGetAuthInfoCalled] = React.useState(true);
+  const [shouldGetAuthInfoCalledStateCounter, setShouldGetAuthInfoCalledCounter] = React.useState(0);
   const baseUrl="http://localhost:3000";
+
+
   return (
     <div >
      {/* <NewsCard newsId={11}  baseUrl={baseUrl}/>
-    */}
+    */}<AppBar shouldGetAuthInfoCalledCounter={shouldGetAuthInfoCalledStateCounter} baseUrl={baseUrl} />
        <Routes>
-       <Route path="/AddNews" element={ <AddNews categoryId={1}  baseUrl={baseUrl}/> } />
+       <Route path="/AddNews" element={ <AddNews categoryId={1}  baseUrl={baseUrl} shouldGetAuthInfoCalledCounter={setShouldGetAuthInfoCalledCounter} /> } />
       <Route path="/signup" element={<SignUp baseUrl={baseUrl}/>} />
-      <Route path="/login" element={<Login baseUrl={baseUrl}/>} />
+      <Route path="/login" element={<Login baseUrl={baseUrl} setShouldGetAuthInfoCalledCounter={setShouldGetAuthInfoCalledCounter}/>} />
       <Route path="/newsNavBar" element={<NewsNavbar  baseUrl={baseUrl}/>} />
       <Route path="/getnews" element={<NewsCard   baseUrl={baseUrl}/>} />
       <Route path="/categoryCRUD" element={<CategoryCRUD   baseUrl={baseUrl}/>} />

@@ -12,13 +12,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
+import Preloader from "../Preloader/Preloader";
+import Modal from "../Modal/Modal";
+import { useNavigate } from "react-router-dom";
 function AppBar(props) {
+  const navigate = useNavigate();
+  debugger;
+  const baseUrl = props.baseUrl;
+  const [modalState, setModalState] = React.useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
+  const [isPreloaderOpenState, setIsPreloaderOpen] = React.useState(false);
 
-    const authenticationProp = props.authenticationProps;
+    const shouldGetAuthInfoCalledCounter = props.shouldGetAuthInfoCalledCounter;
+    
+    const [authenticationPropState, setAuthenticationProp] = React.useState({isAuthenticated:false,initials:null});
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -37,7 +43,70 @@ function AppBar(props) {
     setAnchorElUser(null);
   };
 
-  return (
+
+  const getAuthInfo = () => {
+
+   setIsPreloaderOpen(true);
+
+    fetch(`${baseUrl}/api/User/GetAuthInfo`, {
+      method: 'GET', // or 'PUT'
+            })
+      .then((response) => {
+  if (!response.ok){
+    debugger;
+  return Promise.reject("Unknown Error Occured");
+  }
+  return response.json(); }).then(x=> {
+if (x.hasError){
+return Promise.reject(x.message);
+}
+setAuthenticationProp({isAuthenticated:x.isAuthenticated,initials:x.initials});
+
+  }, x=> Promise.reject("Unknown Error Occured")
+  
+  ).catch(x=> {
+debugger;
+    setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
+
+  }).finally( () =>   setIsPreloaderOpen(false))
+  };
+  React.useEffect(  getAuthInfo,[shouldGetAuthInfoCalledCounter])
+
+var onLogout =  (e)=> {
+
+setIsPreloaderOpen(true);
+
+fetch(`${baseUrl}/api/User/Logout`, {
+  method: 'POST', // or 'PUT'
+        })
+  .then((response) => {
+if (!response.ok){
+debugger;
+return Promise.reject("Unknown Error Occured");
+}
+return response.json(); }).then(x=> {
+if (x.hasError){
+return Promise.reject(x.message);
+}
+
+
+}, x=> Promise.reject("Unknown Error Occured")
+
+).catch(x=> {
+debugger;
+setModalState({isOpen:true,content:x,type:"fail",okOnClick:()=> setModalState({isOpen:false})});
+
+}).finally( () =>   {setIsPreloaderOpen(false);getAuthInfo();navigate("/");})
+
+}  
+const pages = ['Products', 'Pricing', 'Blog'];
+const settings = [{name:'Logout',onClick:onLogout}];
+  return (<div> 
+
+     
+<Modal isOpen={modalState.isOpen} content={modalState.content} header={modalState.header}  type={modalState.type} okOnClick={modalState.okOnClick} negativeOnClick={modalState.negativeOnClick} positiveOnClick={modalState.positiveOnClick} />
+    <Preloader isOpen={isPreloaderOpenState}/>
+
     <MUAppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -130,7 +199,7 @@ function AppBar(props) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar >{authenticationProp.initials}</Avatar>
+                <Avatar >{authenticationPropState.initials}</Avatar>
                 
               </IconButton>
             </Tooltip>
@@ -150,16 +219,18 @@ function AppBar(props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {authenticationPropState.isAuthenticated ?      <MenuItem key={"Logout"} onClick={onLogout}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>:  <MenuItem key={"Login"} onClick={() => {navigate("/login");}}>
+                  <Typography textAlign="center">Login</Typography>
+                </MenuItem>}
+            
+         
             </Menu>
           </Box>
         </Toolbar>
       </Container>
-    </MUAppBar>
+    </MUAppBar>  </div>
   );
 }
 export default AppBar;

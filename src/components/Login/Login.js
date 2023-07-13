@@ -9,7 +9,7 @@ function Login(props){
 
     const baseUrl = props.baseUrl;
     const [modalState, setModalState] = useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
-  
+  const setShouldGetAuthInfoCalledCounter = props.setShouldGetAuthInfoCalledCounter;
     const [startDate, setStartDate] = useState(new Date());
     const [isPreloaderOpenState, setIsPreloaderOpen] = useState(false);
     const [passwordsVisible, setPasswordsVisible] = useState({
@@ -80,6 +80,7 @@ function Login(props){
     if (x.hasError){
     return Promise.reject(x.message);
     }
+    setShouldGetAuthInfoCalledCounter(prevState => ++prevState)
     setModalState({isOpen:true,content:x.message,type:"success",okOnClick:()=> setModalState({isOpen:false})});
     
       }, x=> Promise.reject("Unknown Error Occured")
