@@ -54,7 +54,7 @@ const LoadNewsList = e => {
         if (x.hasError){
         return Promise.reject(x.message);
         }return x;})
-      var isCategoryAdminPromise  = fetch(`${baseUrl}/api/User/IsCategoryAdmin?categoryId=${categoryId}`, {
+      var isCategoryAdminPromise  = fetch(`${baseUrl}/api/CategoryAdmin/IsCategoryAdmin?categoryId=${categoryId}`, {
         method: 'POST', // or 'PUT', 
       
           }).then((response) => {

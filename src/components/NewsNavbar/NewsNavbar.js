@@ -24,7 +24,7 @@ const setSelectedCategoryIdQueryParam = categoryId => {
 };
 
 const selectedCategoryId = parseInt(searchParams.get("categoryId"));
-  const [selectedTabValue, setselectedTabValue] = React.useState(null);
+  const [selectedTabValue, setselectedTabValue] = React.useState(0);
   const [categoriesState, setCategoriesState] = React.useState([]);
   const [isPreloaderOpenState, setIsPreloaderOpen] = React.useState(false);
   const [modalState, setModalState] = React.useState({isOpen:false,header:null,content:null,type:null,okOnClick:null,negativeOnClick:null,positiveOnClick:null});
